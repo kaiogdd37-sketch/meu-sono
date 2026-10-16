@@ -3,6 +3,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0d0f1a">
+<script>
+(function(){function show(m){try{var d=document.createElement("pre");d.style.cssText="position:fixed;z-index:99999;left:0;right:0;top:0;margin:0;background:#5a0000;color:#fff;font:12px monospace;padding:12px;white-space:pre-wrap;max-height:50%;overflow:auto";d.textContent="ERRO: "+m;(document.body||document.documentElement).appendChild(d)}catch(e){}}
+window.addEventListener("error",function(e){show((e.message||"")+" (linha "+(e.lineno||"?")+":"+(e.colno||"?")+")")});
+window.addEventListener("unhandledrejection",function(e){show("promessa: "+(e.reason&&e.reason.message||e.reason))});})();
+</script>
 <style>[hidden]{display:none!important}body{margin:0}:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 <title>Meu Sono</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -312,7 +317,8 @@ const BGKEY=KEY+"-bg";
 let bgData=null;
 try{bgData=localStorage.getItem(BGKEY)}catch(e){}
 function saveBg(){try{if(bgData)localStorage.setItem(BGKEY,bgData);else localStorage.removeItem(BGKEY)}catch(e){toast("Não foi possível guardar a foto. Tente uma menor.")}}
-const SleepMode=(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())?window.Capacitor.registerPlugin("SleepMode"):null;
+let SleepMode=null;
+try{if(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())SleepMode=window.Capacitor.registerPlugin("SleepMode")}catch(e){SleepMode=null}
 async function nativeSleep(on,prompt){
   if(!SleepMode)return;
   try{
